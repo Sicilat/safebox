@@ -1,14 +1,16 @@
-import socket
+import socket, time
 SERVER = "127.0.0.1"
 PORT = 8080
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
-client.sendall(bytes("This is from Client",'UTF-8'))
-while True:
-	in_data =  client.recv(1024)
-	print("From Server :" ,in_data.decode())
-	out_data = input()
-	client.sendall(bytes(out_data,'UTF-8'))
-	if out_data=='bye':
-		break
+out_data = [0, 0]
+	
+def ask_credentials():
+	out_data[0] = input('Username > ')
+	out_data[1] = input('Password > ')
+	client.sendall(bytes(out_data[0],'UTF-8'))
+	time.sleep(0.1)
+	client.sendall(bytes(out_data[1],'UTF-8'))
+
+ask_credentials()
 client.close()

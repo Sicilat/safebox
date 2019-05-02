@@ -1,5 +1,4 @@
 import socket, time, getpass, os
-from Crypto.Cipher import AES
 SERVER = "127.0.0.1"
 PORT = 8080
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

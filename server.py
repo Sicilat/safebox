@@ -1,31 +1,19 @@
-import socket, threading, datetime
-from Crypto.Cipher import AES
+import socket, threading, datetime, time, random, sqlite3
 
 def get_time():
-    return str(datetime.datetime.now())
-
-def log_pass():
-    global log_file
-    log_file.write('\n')
+    return str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
 
 class ClientThread(threading.Thread):
     def __init__(self,clientAddress,clientsocket):
-        global log_file
         threading.Thread.__init__(self)
         self.csocket = clientsocket
-        print_msg = get_time() , " - New connection added: " , clientAddress
-        print(str(print_msg))
-        log_file.write(str(print_msg))
-        log_pass()
+        print(get_time() + " - New connection added: " + str(clientAddress))
     def run(self):
-        global log_file
         msg = ['', '', '']
         usr_list = ['Alexandre', 'admin']
         pass_list = ['Test', 'admin']
-        print_msg = get_time() , " - Connection from : " , clientAddress
-        print(str(print_msg))
-        log_file.write(str(print_msg))
-        log_pass()
+        print(get_time() + " - Connection from : " + str(clientAddress))
+       
         #data = self.csocket.recv(2048)
         #msg = data.decode()
         #print (datetime.datetime.now() , " - From " , clientAddress , " :", msg)
@@ -40,39 +28,20 @@ class ClientThread(threading.Thread):
             psw = msg[2]
             if usr in usr_list and psw in pass_list:
                 self.csocket.send(bytes('log_fine','UTF-8'))
-                print_msg = get_time() , " - Client at ",  clientAddress , " logged in with username : " , usr
-                print(str(print_msg))
-                log_file.write(str(print_msg))
-                log_pass()
+                print(get_time() + " - Client at " +  str(clientAddress) + " logged in with username : " + str(usr))
             else:
                 self.csocket.send(bytes('log_shit','UTF-8'))
-                print_msg = get_time() , " - Client at ",  clientAddress , " tried to log in with username : " , usr
-                print(str(print_msg))
-                log_file.write(str(print_msg))
-                log_pass()
-
-        print_msg = get_time() , " - Client at ",  clientAddress , " disconnected..."
-        print(str(print_msg))
-        log_file.write(str(print_msg))
-        log_pass()
-
-
-
-
-log_file = open('./log.txt', 'a', encoding = 'UTF-8')
+                print(get_time() + " - Client at " + str(clientAddress) + " tried to log in with username : " + str(usr))
+        print(get_time() + " - Client at " + str(clientAddress) + " disconnected...")
+        
 LOCALHOST = "127.0.0.1"
 PORT = 8080
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((LOCALHOST, PORT))
-print_msg = get_time() , " - Server started"
-print(str(print_msg))
-log_file.write(str(print_msg))
-log_pass()
-print_msg = get_time() , " - Waiting for client request.."
-print(str(print_msg))
-log_file.write(str(print_msg))
-log_pass()
+print(get_time() + " - Server started")
+print(get_time() + " - Waiting for client request..")
+
 while True:
     server.listen(1)
     clientsock, clientAddress = server.accept()

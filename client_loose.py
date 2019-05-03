@@ -1,4 +1,4 @@
-import socket, time, getpass, os
+import socket, time, getpass, os, pickle
 SERVER = "127.0.0.1"
 PORT = 8080
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -8,28 +8,29 @@ out_data = [0, 0, 0]
 def clear():
 	os.system('clear||cls')
 
+def receive_data(client):
+    data = client.recv(2048)
+    return pickle.loads(data)
+
+def send_data(client, tdata):
+    data = pickle.dumps(tdata)
+    client.sendall(data)
+
 def ask_credentials_crt_cpt():
-	client.sendall(bytes(out_data[0],'UTF-8'))
-	time.sleep(0.1)
-	client.sendall(bytes(out_data[1],'UTF-8'))
+	#Todo
+	return
 
 def ask_credentials_log_cpt():
 	usr = input('Username > ')
 	psw = getpass.getpass('Password > ')
 	out_data[0], out_data[1], out_data[2] = 'log', usr, psw
-	client.sendall(bytes(out_data[0],'UTF-8'))
-	time.sleep(0.1)
-	client.sendall(bytes(out_data[1],'UTF-8'))
-	time.sleep(0.1)
-	client.sendall(bytes(out_data[2],'UTF-8'))
-	time.sleep(0.1)
-	in_data =  client.recv(2048)
-	server_asw = in_data.decode()
-	if server_asw == 'log_fine':
+	send_data(client, out_data)
+	server_asw = receive_data(client)
+	if server_asw[0] == 'log_fine':
 		print('Login successful !')
 		time.sleep(2)
 		clear()
-	elif server_asw == 'log_shit':
+	elif server_asw[0] == 'log_shit':
 		print('Login unsuccessful !')
 		time.sleep(2)
 		clear()
@@ -40,8 +41,8 @@ def ask_credentials_log_cpt():
 
 def menu():
 	asw = ''
-	possibility = ['create', 'login']
-	while asw.lower() not in possibility:
+	possibilitys = ['create', 'login']
+	while asw.lower() not in possibilitys:
 		print('Would you like to create an account or login ?')
 		print('create/login')
 		asw = input('> ')

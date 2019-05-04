@@ -12,12 +12,27 @@ def create_tables():
     db_connection = sqlite3.connect('database.db')
     cursor = db_connection.cursor()
     cursor.execute('CREATE TABLE IF NOT EXISTS users(datestamp TEXT, email TEXT, password TEXT)')
-    cursor.execute('CREATE TABLE IF NOT EXISTS storage(datestamp TEXT, email TEXT, password TEXT, about TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS storage(datestamp TEXT, email TEXT, id REAL, password TEXT, about TEXT)')
     cursor.close()
     db_connection.close()
 
 def get_time():
     return str(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
+
+def del_account(self, data):
+    db_connection = sqlite3.connect('database.db')
+    cursor = db_connection.cursor()
+    sql = "DELETE FROM users WHERE email='" + data[1] + "'"
+    cursor.execute(sql)
+    db_connection.commit()
+    print(get_time() + " - Client at " +  str(clientAddress) + " deleted account : " + str(data[1]))
+    cursor.close()
+    db_connection.close()
+
+def logged_menu(self, data):
+    data = receive_data(self)
+    if data[0] == 'spr':
+        del_account(self, data)
 
 def log_in(self, data):
     db_connection = sqlite3.connect('database.db')
@@ -28,11 +43,16 @@ def log_in(self, data):
     if result == 1:
         send_data(self, ['log_fine'])
         print(get_time() + " - Client at " +  str(clientAddress) + " logged in with email : " + str(data[1]))
+        cursor.close()
+        db_connection.close()
+        logged_menu(self, data)
+        return 1
     else:
         send_data(self, ['log_shit'])
         print(get_time() + " - Client at " + str(clientAddress) + " tried to log in with email : " + str(data[1]))
-    cursor.close()
-    db_connection.close()
+        cursor.close()
+        db_connection.close()
+        return 1
 
 def create_account(self, data):
     db_connection = sqlite3.connect('database.db')
@@ -51,6 +71,7 @@ def create_account(self, data):
         print(get_time() + " - Client at " + str(clientAddress) + " tried to create an account with email : " + str(data[1]))
     cursor.close()
     db_connection.close()
+    return 0
 
 
 class ClientThread(threading.Thread):
@@ -61,11 +82,13 @@ class ClientThread(threading.Thread):
     def run(self):
         msg = ['', '', '']
         print(get_time() + " - Connection from : " + str(clientAddress))
-        msg = receive_data(self)
-        if msg[0] == 'log':
-            log_in(self, msg)
-        elif msg[0] == 'crt':
-            create_account(self, msg)
+        exit_var = 0
+        while exit_var == 0:
+            msg = receive_data(self)
+            if msg[0] == 'log':
+                exit_var = log_in(self, msg)
+            elif msg[0] == 'crt':
+                exit_var = create_account(self, msg)
 
         print(get_time() + " - Client at " + str(clientAddress) + " disconnected...")
 

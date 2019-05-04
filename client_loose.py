@@ -16,6 +16,30 @@ def send_data(client, tdata):
     data = pickle.dumps(tdata)
     client.sendall(data)
 
+def logged_menu(out_data):
+	while True:
+		print('Compte : ' + out_data[1])
+		print('1 - Supression du compte')
+		print('2 - Quitter')
+		asw = int(input('> '))
+		while asw not in [1, 2]:
+			clear()
+			print('Compte : ' + out_data[1])
+			print('1 - Supression du compte')
+			print('2 - Quitter')
+			asw = int(input('> '))
+		clear()
+		if asw == 1:
+			out_data[0] = 'spr'
+			send_data(client, out_data)
+			print('Compte supprimé !')
+			client.close()
+			time.sleep(2)
+			clear()
+			exit()
+		else:
+			break
+
 def ask_credentials_crt_cpt():
 	usr = input('Email > ')
 	psw = getpass.getpass('Password > ')
@@ -26,14 +50,17 @@ def ask_credentials_crt_cpt():
 		print('Account creation successful !')
 		time.sleep(2)
 		clear()
+		menu()
 	elif server_asw[0] == 'log_shit':
 		print('Account creation unsuccessful ! (E-mail maybe already in use)')
 		time.sleep(2)
 		clear()
+		menu()
 	else:
 		print('Seems broken...')
 		time.sleep(2)
 		clear()
+		menu()
 
 def ask_credentials_log_cpt():
 	usr = input('Email > ')
@@ -45,24 +72,27 @@ def ask_credentials_log_cpt():
 		print('Login successful !')
 		time.sleep(2)
 		clear()
+		logged_menu(out_data)
 	elif server_asw[0] == 'log_shit':
 		print('Login unsuccessful !')
 		time.sleep(2)
 		clear()
+		menu()
 	else:
 		print('Seems broken...')
 		time.sleep(2)
 		clear()
+		menu()
 
 def menu():
-	asw = ''
-	possibilitys = ['create', 'login']
-	while asw.lower() not in possibilitys:
+	asw = 0
+	while asw not in [1, 2]:
 		print('Would you like to create an account or login ?')
-		print('create/login')
-		asw = input('> ')
+		print('1 - Create')
+		print('2 - Login')
+		asw = int(input('> '))
 		clear()
-	if asw == 'create':
+	if asw == 1:
 		ask_credentials_crt_cpt()
 	else:
 		ask_credentials_log_cpt()

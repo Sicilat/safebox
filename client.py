@@ -3,7 +3,7 @@ SERVER = "127.0.0.1"
 PORT = 8080
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
-out_data = [0, 0, 0]
+out_data = [0, 0, 0, 0, 0]
 
 def clear():
 	os.system('clear||cls')
@@ -16,20 +16,54 @@ def send_data(client, tdata):
     data = pickle.dumps(tdata)
     client.sendall(data)
 
+def password_menu(out_data):
+	while True:
+		clear()
+		out_data[0] = 'psw'
+		send_data(client, out_data)
+		psw_data = receive_data(client)
+		print('Password menu')
+		print('1 - Add a password')
+		print('2 - Quit')
+		print('')
+		if len(psw_data) > 0:
+			for row in psw_data:
+				print(row)
+			time.sleep(2)
+		else:
+			print('No password is saved !')
+			time.sleep(2)
+		print ('')
+		asw = int(input('> '))
+		if asw == 1:
+			out_data[0] = 'psw_add'
+			clear()
+			out_data[3] = input('Password to save > ')
+			out_data[4] = input('About this > ')
+			send_data(client, out_data)
+			rcv_srv = receive_data(client)
+			if rcv_srv[0] == 'log_fine':
+				pass
+		elif asw == 2:
+			clear()
+			client.close()
+			exit()
+
 def logged_menu(out_data):
 	while True:
 		print('Compte : ' + out_data[1])
-		print('1 - Supression du compte')
-		print('2 - Quitter')
+		print('1 - Liste des mots de passe')
+		print('2 - Supression du compte')
+		print('3 - Quitter')
 		asw = int(input('> '))
-		while asw not in [1, 2]:
+		while asw not in [1, 2, 3]:
 			clear()
 			print('Compte : ' + out_data[1])
 			print('1 - Supression du compte')
 			print('2 - Quitter')
 			asw = int(input('> '))
 		clear()
-		if asw == 1:
+		if asw == 2:
 			out_data[0] = 'spr'
 			send_data(client, out_data)
 			print('Compte supprimé !')
@@ -37,6 +71,9 @@ def logged_menu(out_data):
 			time.sleep(2)
 			clear()
 			exit()
+		elif asw == 1:
+			clear()
+			password_menu(out_data)
 		else:
 			break
 

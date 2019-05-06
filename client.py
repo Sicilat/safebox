@@ -29,10 +29,8 @@ def password_menu(out_data):
 		if len(psw_data) > 0:
 			for row in psw_data:
 				print(row)
-			time.sleep(2)
 		else:
 			print('No password is saved !')
-			time.sleep(2)
 		print ('')
 		asw = int(input('> '))
 		if asw == 1:
@@ -41,9 +39,7 @@ def password_menu(out_data):
 			out_data[3] = input('Password to save > ')
 			out_data[4] = input('About this > ')
 			send_data(client, out_data)
-			rcv_srv = receive_data(client)
-			if rcv_srv[0] == 'log_fine':
-				pass
+			time.sleep(1)
 		elif asw == 2:
 			clear()
 			client.close()

@@ -30,9 +30,10 @@ def del_account(self, data):
     db_connection.close()
 
 def psw_menu(self, data):
+    db_connection = sqlite3.connect('database.db')
+    cursor = db_connection.cursor()
     while True:
-        db_connection = sqlite3.connect('database.db')
-        cursor = db_connection.cursor()
+        results = cursor.fetchall()
         sql = "SELECT * FROM storage WHERE email='" + data[1] + "'"
         cursor.execute(sql)
         results = cursor.fetchall()
@@ -45,14 +46,9 @@ def psw_menu(self, data):
             date = get_time()
             cursor.execute("INSERT INTO storage (datestamp, email, id, password, about) VALUES (?, ?, ?, ?, ?)", (date, data[1], id_psw, data[3], data[4]))
             db_connection.commit()
-            send_data(self, ['log_fine'])
-            print(get_time() + " - Client at " +  str(clientAddress) + " added add a password with email : " + str(data[1]))
-            cursor.close()
-            db_connection.close()
-        else:
-            send_data(self, ['log_shit'])
-            cursor.close()
-            db_connection.close()
+            print(get_time() + " - Client at " +  str(clientAddress) + " added a password with email : " + str(data[1]))
+    cursor.close()
+    db_connection.close()
 
 def logged_menu(self, data):
     data = receive_data(self)

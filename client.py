@@ -28,7 +28,7 @@ def password_menu(out_data):
 		print('')
 		if len(psw_data) > 0:
 			for row in psw_data:
-				print(row)
+				print("ID-" + str(row[2]) + " | " + str(row[3]) + "      " + str(row[4]))
 		else:
 			print('No password is saved !')
 		print ('')

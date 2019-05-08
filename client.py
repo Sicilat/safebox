@@ -24,7 +24,8 @@ def password_menu(out_data):
 		psw_data = receive_data(client)
 		print('Password menu')
 		print('1 - Add a password')
-		print('2 - Quit')
+		print('2 - Delete a password')
+		print('3 - Quit')
 		print('')
 		if len(psw_data) > 0:
 			for row in psw_data:
@@ -41,6 +42,12 @@ def password_menu(out_data):
 			send_data(client, out_data)
 			time.sleep(1)
 		elif asw == 2:
+			out_data[0] = 'dlt'
+			print('Choose the ID of the password to delete')
+			out_data[3] = int(input('> '))
+			send_data(client, out_data)
+			time.sleep(1)
+		elif asw == 3:
 			clear()
 			client.close()
 			exit()

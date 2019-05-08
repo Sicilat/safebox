@@ -40,13 +40,18 @@ def psw_menu(self, data):
         send_data(self, results)
         data = receive_data(self) #psw, about
         if data[0] == 'psw_add':
-            sql = "SELECT * FROM storage WHERE email='" + data[1] + "'"
+            sql = "SELECT MAX(id) FROM storage WHERE email='" + data[1] + "'"
             cursor.execute(sql)
-            id_psw = len(cursor.fetchall()) + 1
+            id_psw = int(cursor.fetchone()[0]) + 1
             date = get_time()
             cursor.execute("INSERT INTO storage (datestamp, email, id, password, about) VALUES (?, ?, ?, ?, ?)", (date, data[1], id_psw, data[3], data[4]))
             db_connection.commit()
             print(get_time() + " - Client at " +  str(clientAddress) + " added a password with email : " + str(data[1]))
+        if data[0] == 'dlt':
+            sql = "DELETE FROM storage WHERE id='" + str(data[3]) + "'"
+            cursor.execute(sql)
+            db_connection.commit()
+            print(get_time() + " - Client at " +  str(clientAddress) + " deleted a password with email : " + str(data[1]))
     cursor.close()
     db_connection.close()
 

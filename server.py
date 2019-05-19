@@ -25,7 +25,7 @@ def del_account(self, data):
     sql = "DELETE FROM users WHERE email='" + data[1] + "'"
     cursor.execute(sql)
     db_connection.commit()
-    print(get_time() + " - Client at " +  str(clientAddress) + " deleted account : " + str(data[1]))
+    print(get_time() + " - Client depuis " +  str(clientAddress) + " a supprimméle compte : " + str(data[1]))
     cursor.close()
     db_connection.close()
 
@@ -46,12 +46,12 @@ def psw_menu(self, data):
             date = get_time()
             cursor.execute("INSERT INTO storage (datestamp, email, id, password, about) VALUES (?, ?, ?, ?, ?)", (date, data[1], id_psw, data[3], data[4]))
             db_connection.commit()
-            print(get_time() + " - Client at " +  str(clientAddress) + " added a password with email : " + str(data[1]))
+            print(get_time() + " - Client depuis " +  str(clientAddress) + " a rajouté un mot de passe avec l'E-mail : " + str(data[1]))
         if data[0] == 'dlt':
             sql = "DELETE FROM storage WHERE id='" + str(data[3]) + "'"
             cursor.execute(sql)
             db_connection.commit()
-            print(get_time() + " - Client at " +  str(clientAddress) + " deleted a password with email : " + str(data[1]))
+            print(get_time() + " - Client depuis " +  str(clientAddress) + " a supprimmé un mot de passe avec l'E-mail : " + str(data[1]))
     cursor.close()
     db_connection.close()
 
@@ -70,14 +70,14 @@ def log_in(self, data):
     result = len(cursor.fetchall())
     if result == 1:
         send_data(self, ['log_fine'])
-        print(get_time() + " - Client at " +  str(clientAddress) + " logged in with email : " + str(data[1]))
+        print(get_time() + " - Client depuis " +  str(clientAddress) + " c'est identifié avec l'E-mail : " + str(data[1]))
         cursor.close()
         db_connection.close()
         logged_menu(self, data)
         return 1
     else:
         send_data(self, ['log_shit'])
-        print(get_time() + " - Client at " + str(clientAddress) + " tried to log in with email : " + str(data[1]))
+        print(get_time() + " - Client depuis " + str(clientAddress) + " a essayé de s'identifier avec l'E-mail : " + str(data[1]))
         cursor.close()
         db_connection.close()
         return 1
@@ -92,11 +92,11 @@ def create_account(self, data):
         date = get_time()
         cursor.execute("INSERT INTO users (datestamp, email, password) VALUES (?, ?, ?)", (date, data[1], data[2]))
         db_connection.commit()
-        print(get_time() + " - Client at " +  str(clientAddress) + " created an account with email : " + str(data[1]))
+        print(get_time() + " - Client depuis " +  str(clientAddress) + " a créé un compte avec l'E-mail : " + str(data[1]))
         send_data(self, ['log_fine'])
     else:
         send_data(self, ['log_shit'])
-        print(get_time() + " - Client at " + str(clientAddress) + " tried to create an account with email : " + str(data[1]))
+        print(get_time() + " - Client depuis " + str(clientAddress) + " a essayé de créer un compte avec l'E-mail : " + str(data[1]))
     cursor.close()
     db_connection.close()
     return 0
@@ -106,10 +106,10 @@ class ClientThread(threading.Thread):
     def __init__(self,clientAddress, clientsocket):
         threading.Thread.__init__(self)
         self.csocket = clientsocket
-        print(get_time() + " - New connection added: " + str(clientAddress))
+        print(get_time() + " - Nouvelle connection ajoutée: " + str(clientAddress))
     def run(self):
         msg = ['', '', '']
-        print(get_time() + " - Connection from : " + str(clientAddress))
+        print(get_time() + " - Connection depuis : " + str(clientAddress))
         exit_var = 0
         while exit_var == 0:
             msg = receive_data(self)
@@ -118,7 +118,7 @@ class ClientThread(threading.Thread):
             elif msg[0] == 'crt':
                 exit_var = create_account(self, msg)
 
-        print(get_time() + " - Client at " + str(clientAddress) + " disconnected...")
+        print(get_time() + " - Client depuis " + str(clientAddress) + " c\'est déconnecté...")
 
 create_tables()
 LOCALHOST = "127.0.0.1"
@@ -126,8 +126,8 @@ PORT = 8080
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((LOCALHOST, PORT))
-print(get_time() + " - Server started")
-print(get_time() + " - Waiting for client request..")
+print(get_time() + " - Serveur lancé")
+print(get_time() + " - En attente des requêtes clientes")
 
 while True:
     server.listen(1)

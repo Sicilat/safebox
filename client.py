@@ -5,18 +5,18 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
 out_data = [0, 0, 0, 0, 0]
 
-def clear():
+def clear():					#Nettoie le terminal
 	os.system('clear||cls')
 
-def receive_data(client):
+def receive_data(client):		#Reçoie les données du serveur
     data = client.recv(2048)
     return pickle.loads(data)
 
-def send_data(client, tdata):
+def send_data(client, tdata):	#Envoie les données au serveur
     data = pickle.dumps(tdata)
     client.sendall(data)
 
-def password_menu(out_data):
+def password_menu(out_data):	#Gérer le menu des mots de passe
 	while True:
 		clear()
 		out_data[0] = 'psw'
@@ -52,7 +52,7 @@ def password_menu(out_data):
 			client.close()
 			exit()
 
-def logged_menu(out_data):
+def logged_menu(out_data):			#Gérer le menu principale
 	while True:
 		print('Compte : ' + out_data[1])
 		print('1 - Liste des mots de passe')
@@ -81,7 +81,7 @@ def logged_menu(out_data):
 		else:
 			break
 
-def ask_credentials_crt_cpt():
+def ask_credentials_crt_cpt():			#Gérer la création de compte
 	usr = input('Email > ')
 	psw = str.encode(getpass.getpass('Mot de passe > '))
 	psw = hashlib.sha512(psw).hexdigest()
@@ -104,7 +104,7 @@ def ask_credentials_crt_cpt():
 		clear()
 		menu()
 
-def ask_credentials_log_cpt():
+def ask_credentials_log_cpt():			#Gérer la connexion au compte
 	usr = input('Email > ')
 	psw = str.encode(getpass.getpass('Mot de passe > '))
 	psw = hashlib.sha512(psw).hexdigest()
@@ -127,7 +127,7 @@ def ask_credentials_log_cpt():
 		clear()
 		menu()
 
-def menu():
+def menu():							#Gérer le menu de connexion et de création
 	asw = 0
 	while asw not in [1, 2]:
 		print('Voulez-vous créer un compte ou vous identifier ?')

@@ -1,21 +1,21 @@
 import random
 import string
-import tkinter
 import re
 import os
 
 
 # PARTIE DEFINITION DES FONCTIONS
 
-def genMdp(size=10): #Fonction de génération de mot de passe de taille "size"
+def genMdp(size=10): #Fonction de génération de mot de passe de taille "size".
 	
 	if size <= 20 and size >= 10:
 		sourceChar = string.ascii_letters + string.digits + string.punctuation
 		mdp = random.choice(string.ascii_lowercase)
 		mdp = mdp + random.choice(string.ascii_uppercase)
 		mdp = mdp + random.choice(string.digits)
+		mdp = mdp + random.choice(string.digits)
 		mdp = mdp + random.choice(string.punctuation)
-		for i in range(size-4):
+		for i in range(size-5):
 		    mdp += random.choice(sourceChar)
 		mdpList = list(mdp)
 		random.SystemRandom().shuffle(mdpList)
@@ -35,7 +35,7 @@ def verifContraintes(mdp): #Fonction de vérification des contraintes du mot de 
 
 	specialChars = len(mdp) - len( re.findall('[\w]', mdp) )	# On détermine le nombre de caractères spéciaux dans mdp.
 	if specialChars < 1:
-		print("Le mot de passe doit contenir au moins un caractère spécial : # $ & ^ # @!" )
+		print("Le mot de passe doit contenir au moins un caractère spécial : # $ & ^ @!" )
 		sp_char = False
 	else:
 		sp_char = True
@@ -83,12 +83,12 @@ def verifContraintes(mdp): #Fonction de vérification des contraintes du mot de 
 
 
 	# Validation du mot de passe après analyse des contraintes #
-	if sp_char and nb_chiffre and nb_maj and nb_min and	lenMdp:							# Si le mot de passe est correct
+	if sp_char and nb_chiffre and nb_maj and nb_min and	lenMdp:							# Si le mot de passe est correct.
 
 		Verif = True
 	else:
 		Verif = False
-	return Verif		# Return si le mot de passe est correct ou non
+	return Verif		# Return si le mot de passe est correct ou non.
 
 
 # PARTIE EXECUTION DU PROGRAMME #
@@ -97,10 +97,10 @@ size = 0
 choixGen="null"
 Verif = False
 
-while not Verif: #Boucle pour définir le mot de passe tant que le mot de passe est incorrect
+while not Verif:								#Boucle pour définir le mot de passe tant que le mot de passe est incorrect.
 	print("Choisissez votre mode d'entrée de mot passe")
 
-	while choixGen != "r" and choixGen != "m": #Choix du mode d'entrée
+	while choixGen != "r" and choixGen != "m":	#Choix du mode d'entrée.
 		print("Aléatoire : r | Manuel : m")
 		choixGen = str(input())
 
@@ -108,12 +108,18 @@ while not Verif: #Boucle pour définir le mot de passe tant que le mot de passe 
 		print("Choisissez la taille de votre mot de passe :")
 		while size >= 21 or size <= 9:
 			size = int(input())
-			mdp = genMdp(size) #Appel de la fonction de génération
+			mdp = genMdp(size)					#Appel de la fonction de génération.
 	elif choixGen == "m":
-		print("Saisissez votre mot de passe :")
-		mdp=str(input()) #Input du mot de passe en manuel
+		print("Votre mot de passe doit contrenir au moins:")
+		print("	>2 majucules")
+		print("	>2 chiffres")
+		print("	>1 caractère spécial")
+		print("	>Une taille de" , size , "caractères.")
 
-	Verif = verifContraintes(mdp) #Vérification du mot de passe
+		print("Saisissez votre mot de passe :")
+		mdp=str(input())						#Input du mot de passe en manuel.
+
+	Verif = verifContraintes(mdp) 				#Vérification du mot de passe.
 	
 	if Verif:
 		print("Mot de passe correct.")

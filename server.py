@@ -42,7 +42,11 @@ def psw_menu(self, data):           #Gérer les données utilisateur en provenan
         if data[0] == 'psw_add':
             sql = "SELECT MAX(id) FROM storage WHERE email='" + data[1] + "'"
             cursor.execute(sql)
-            id_psw = int(cursor.fetchone()[0]) + 1
+            id_psw = cursor.fetchone()[0]
+            if type(id_psw) == 'NoneType':
+                id_psw = int(id_psw) + 1
+            else:
+                id_psw = 0
             date = get_time()
             cursor.execute("INSERT INTO storage (datestamp, email, id, password, about) VALUES (?, ?, ?, ?, ?)", (date, data[1], id_psw, data[3], data[4]))
             db_connection.commit()

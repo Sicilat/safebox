@@ -13,11 +13,13 @@ def genMdp(size=10): #Fonction de génération de mot de passe de taille "size".
 	if size <= 20 and size >= 10:
 		sourceChar = string.ascii_letters + string.digits + string.punctuation
 		mdp = random.choice(string.ascii_lowercase)
+		mdp = random.choice(string.ascii_lowercase)
+		mdp = mdp + random.choice(string.ascii_uppercase)
 		mdp = mdp + random.choice(string.ascii_uppercase)
 		mdp = mdp + random.choice(string.digits)
 		mdp = mdp + random.choice(string.digits)
 		mdp = mdp + random.choice(string.punctuation)
-		for i in range(size-5):
+		for i in range(size-7):
 		    mdp += random.choice(sourceChar)
 		mdpList = list(mdp)
 		random.SystemRandom().shuffle(mdpList)

@@ -105,6 +105,7 @@ def password_menu(out_data):	#Gérer le menu des mots de passe
 		clear()
 		out_data[0] = 'psw'
 		send_data(client, out_data)
+		time.sleep(1)
 		psw_data = receive_data(client)
 		print('Menu des mots de passe')
 		print('1 - Ajouter un mot de passe')

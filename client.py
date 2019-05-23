@@ -77,18 +77,14 @@ def ask_credentials_log_cpt():			#Gérer la connexion au compte
 		menu()
 
 def logged_menu(out_data):			#Gérer le menu principal
-	while True:
-		print('Compte : ' + out_data[1])
-		print('1 - Liste des mots de passe')
-		print('2 - Supression du compte')
-		print('3 - Quitter')
-		asw = int(input('> '))
-		while asw not in [1, 2, 3]:
+	while True:	#Boucle infinie sortie lors du "break"
+		asw = 0
+		while asw not in [1, 2, 3]:	#Boucle qui tourne tant qu'une réponse correcte n'est pas entrée
 			clear()
-			print('Compte : ' + out_data[1])
-			print('1 - Liste des mots de passe')
-			print('2 - Supression du compte')
-			print('3 - Quitter')
+			print('Compte : ' + out_data[1])	#Affichage du compte utilisé
+			print('1 - Liste des mots de passe')	#
+			print('2 - Supression du compte')		#Affichage des éléments du menu
+			print('3 - Quitter')					#
 			asw = int(input('> '))
 		clear()
 		if asw == 2:
@@ -112,10 +108,10 @@ def password_menu(out_data):	#Gérer le menu des mots de passe
 		send_data(client, out_data)
 		time.sleep(1)
 		psw_data = receive_data(client)
-		print('Menu des mots de passe')
-		print('1 - Ajouter un mot de passe')
-		print('2 - Supprimer un mot de passe')
-		print('3 - Quitter')
+		print('Menu des mots de passe')			#
+		print('1 - Ajouter un mot de passe')	#Affichage des éléments du menu
+		print('2 - Supprimer un mot de passe')	#
+		print('3 - Quitter')					#
 		print('')
 		if len(psw_data) > 0:
 			for row in psw_data:

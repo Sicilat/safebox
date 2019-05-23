@@ -85,11 +85,11 @@ def logged_menu(out_data):			#Gérer le menu principal
 			print('1 - Liste des mots de passe')	#
 			print('2 - Supression du compte')		#Affichage des éléments du menu
 			print('3 - Quitter')					#
-			asw = int(input('> '))
+			asw = int(input('> '))	#Attente de réponse
 		clear()
-		if asw == 2:
-			out_data[0] = 'spr'
-			send_data(client, out_data)
+		if asw == 2:	#Réponse N°2, supression du compte
+			out_data[0] = 'spr'				#Envoie de la demande de
+			send_data(client, out_data)		#supression au serveur
 			print('Compte supprimé !')
 			client.close()
 			time.sleep(2)

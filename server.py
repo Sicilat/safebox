@@ -1,8 +1,12 @@
 import socket, threading, datetime, time, sqlite3, pickle
 
 def receive_data(self):             #Recevoir les données des clients
-    data = self.csocket.recv(2048)
-    return pickle.loads(data)
+    try:
+        data = self.csocket.recv(2048)
+        return pickle.loads(data)
+    except:
+        print(get_time() + " - Client depuis " +  str(clientAddress) + " c'est déconnecté")
+        self.__del__()
 
 def send_data(self, tdata):         #Envoyer les données aux clients
     data = pickle.dumps(tdata)
@@ -25,7 +29,7 @@ def del_account(self, data):        #upprimer un compte utilisateur
     sql = "DELETE FROM users WHERE email='" + data[1] + "'"
     cursor.execute(sql)
     db_connection.commit()
-    print(get_time() + " - Client depuis " +  str(clientAddress) + " a supprimméle compte : " + str(data[1]))
+    print(get_time() + " - Client depuis " +  str(clientAddress) + " a supprimmé le compte : " + str(data[1]))
     cursor.close()
     db_connection.close()
 
@@ -110,6 +114,8 @@ class ClientThread(threading.Thread):       #Permet le multi tâche du serveur
         threading.Thread.__init__(self)
         self.csocket = clientsocket
         print(get_time() + " - Nouvelle connection ajoutée: " + str(clientAddress))
+    def __del__(self):
+        print(get_time() + " - Connection supprimmée: " + str(clientAddress))
     def run(self):
         msg = ['', '', '']
         print(get_time() + " - Connection depuis : " + str(clientAddress))

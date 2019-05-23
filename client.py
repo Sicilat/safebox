@@ -94,32 +94,6 @@ def verifContraintes(mdp): #Fonction de vérification des contraintes du mot de 
 		Verif = False
 	return Verif		# Return si le mot de passe est correct ou non.
 
-<<<<<<< HEAD
-def logged_menu(out_data):			#Gérer le menu principal
-	while True:	#Boucle infinie sortie lors du "break"
-		asw = 0
-		while asw not in [1, 2, 3]:	#Boucle qui tourne tant qu'une réponse correcte n'est pas entrée
-			clear()
-			print('Compte : ' + out_data[1])	#Affichage du compte utilisé
-			print('1 - Liste des mots de passe')	#
-			print('2 - Supression du compte')		#Affichage des éléments du menu
-			print('3 - Quitter')					#
-			asw = int(input('> '))	#Attente de réponse
-		clear()
-		if asw == 2:	#Réponse N°2, supression du compte
-			out_data[0] = 'spr'				#Envoie de la demande de
-			send_data(client, out_data)		#supression au serveur
-			print('Compte supprimé !')
-			client.close()
-			time.sleep(2)
-			clear()
-			exit()
-		elif asw == 1:
-			clear()
-			password_menu(out_data)
-		else:
-			break
-=======
 def receive_data(client):		#Reçoie les données du serveur
     data = client.recv(2048)
     return pickle.loads(data)
@@ -127,7 +101,6 @@ def receive_data(client):		#Reçoie les données du serveur
 def send_data(client, tdata):	#Envoie les données au serveur
     data = pickle.dumps(tdata)
     client.sendall(data)
->>>>>>> parent of 2cdc74c... maj Client
 
 def password_menu(out_data):	#Gérer le menu des mots de passe
 	while True:
@@ -136,10 +109,10 @@ def password_menu(out_data):	#Gérer le menu des mots de passe
 		send_data(client, out_data)
 		time.sleep(1)
 		psw_data = receive_data(client)
-		print('Menu des mots de passe')			#
-		print('1 - Ajouter un mot de passe')	#Affichage des éléments du menu
-		print('2 - Supprimer un mot de passe')	#
-		print('3 - Quitter')					#
+		print('Menu des mots de passe')
+		print('1 - Ajouter un mot de passe')
+		print('2 - Supprimer un mot de passe')
+		print('3 - Quitter')
 		print('')
 		if len(psw_data) > 0:
 			for row in psw_data:

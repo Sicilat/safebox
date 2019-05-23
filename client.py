@@ -95,79 +95,82 @@ def logged_menu(out_data):			#Gérer le menu principal
 			time.sleep(2)
 			clear()
 			exit()
-		elif asw == 1:
+		elif asw == 1:	#Réponse N°1, entrée dans le menu des mots de passe
 			clear()
 			password_menu(out_data)
-		else:
+		else:	#Autre réponse (N°3 uniquement), sortie du programme
 			break
 
 def password_menu(out_data):	#Gérer le menu des mots de passe
-	while True:
+	while True:	#Boucle infinie sortie lors du "break"
 		clear()
-		out_data[0] = 'psw'
-		send_data(client, out_data)
+		out_data[0] = 'psw'			#Requête des mots de passe
+		send_data(client, out_data)	#au serveur
 		time.sleep(1)
-		psw_data = receive_data(client)
+		psw_data = receive_data(client)	#Réception des mots de passe
 		print('Menu des mots de passe')			#
 		print('1 - Ajouter un mot de passe')	#Affichage des éléments du menu
 		print('2 - Supprimer un mot de passe')	#
 		print('3 - Quitter')					#
 		print('')
-		if len(psw_data) > 0:
-			for row in psw_data:
-				print("ID-" + str(row[2]) + " | " + str(row[3]) + "      " + str(row[4]))
-		else:
-			print('Aucun mot de passe sauvegardé !')
+		if len(psw_data) > 0:																#
+			for row in psw_data:															#Affichage des mots de passe
+				print("ID-" + str(row[2]) + " | " + str(row[3]) + "      " + str(row[4]))	#
+		else:											#
+			print('Aucun mot de passe sauvegardé !')	#Message en cas d'aucun message sauvegardé
 		print ('')
-		asw = int(input('> '))
-		if asw == 1:
+		asw = int(input('> '))	#Entrée de réponse pour la navigation dans le menu
+
+		if asw == 1:	#Entrée d'un nouveau mot de passe
+
 			Verif = False
 			size = 0
 
-			while not Verif:								#Boucle pour définir le mot de passe tant que le mot de passe est incorrect.
+			while not Verif:								#Boucle pour définir le mot de passe tant que le mot de passe est incorrect (variable Verif)
 				print("Choisissez votre mode d'entrée de mot passe")
 				choixGen="null"
 			
-				while choixGen != "r" and choixGen != "m":	#Choix du mode d'entrée.
+				while choixGen != "r" and choixGen != "m":	#Choix du mode d'entrée (boucle tant qu'une réponse correcte n'est pas entrée)
 					print("Aléatoire : r | Manuel : m")
 					choixGen = str(input())
 			
-				if choixGen == "r":
+				if choixGen == "r":		#Génération aléatoire du mot de passe
 					print("Choisissez la taille de votre mot de passe :")
-					while size >= 21 or size <= 9:
+					while size >= 21 or size <= 9:			#Choix de la taille du mot de passe (boucle tant qu'une réponse correcte n'est pas entrée)
 						size = int(input())
 						mdp = genMdp(size)					#Appel de la fonction de génération.
-				elif choixGen == "m":
-					print("Votre mot de passe doit contrenir au moins:")
-					print("	>2 majucules")
-					print("	>2 chiffres")
-					print("	>1 caractère spécial")
-					print("	>Une taille de" , size , "caractères.")
+				elif choixGen == "m":	#Génération manuelle du mot de passe
+					print("Votre mot de passe doit contrenir au moins:")		#
+					print("	>2 majucules")										#
+					print("	>2 chiffres")										#Affichage des contraintes
+					print("	>1 caractère spécial")								#
+					print("	>Une taille de" , size , "caractères.")				#
 			
 					print("Saisissez votre mot de passe :")
-					mdp=str(input('Mot de passe à sauvegarder > '))						#Input du mot de passe en manuel.
+					mdp=str(input('Mot de passe à sauvegarder > '))		#Input du mot de passe en manuel
 			
-				Verif = verifContraintes(mdp) 				#Vérification du mot de passe.
+				Verif = verifContraintes(mdp) 				#Vérification du mot de passe à l'aide de la fonction verifContraintes
 				
-				if Verif:
+				if Verif:	#Si le mot de passe correspond aux critères, affichage de message puis suite du programme
 					print("Mot de passe correct.")
-				else:
+				else:		#À l'inverse, si le mot de passe est incorrect, affichage de message et retour à l'entrée de celui-ci
 					print("Mot de passe incorrect.")
 
 
-			out_data[0] = 'psw_add'
-			out_data[3] = mdp
-			out_data[4] = input('À propos > ')
-			clear()
-			send_data(client, out_data)
+			out_data[0] = 'psw_add'				#
+			out_data[3] = mdp					#Envoi des informations relatives au mot de passe au serveur
+			out_data[4] = input('À propos > ')	#
+			clear()								#
+			send_data(client, out_data)			#
 			time.sleep(1)
-		elif asw == 2:
+
+		elif asw == 2:	#Suppression d'un mot de passe
 			out_data[0] = 'dlt'
 			print('Choisissez l\'ID du mot de passe à supprimer')
-			out_data[3] = int(input('> '))
-			send_data(client, out_data)
+			out_data[3] = int(input('> '))	#Choix du mot de passe à supprimer
+			send_data(client, out_data)		#et envoi au serveur
 			time.sleep(1)
-		elif asw == 3:
+		elif asw == 3:		#Fermeture du programme
 			clear()
 			client.close()
 			exit()
